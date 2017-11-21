@@ -1,0 +1,33 @@
+{
+  "name": "crypto_miner_monitor",
+  "version": "1.0.0",
+  "description": "Monitor cryptocurrency mining hardware with the ability to reset power supply along with Alexa integration.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://ryanjgill@github.com/ryanjgill/crypto_miner_monitor.git"
+  },
+  "keywords": [
+    "Crypto",
+    "Mining",
+    "Monitor",
+    "crypto",
+    "currency",
+    "mkr1000"
+  ],
+  "author": "Ryan Gill",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryanjgill/crypto_miner_monitor/issues"
+  },
+  "homepage": "https://github.com/ryanjgill/crypto_miner_monitor#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "pug": "^2.0.0-rc.4"
+  }
+}

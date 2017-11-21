@@ -1,0 +1,8 @@
+.row {
+  margin: 1rem;
+  max-width:  800px;
+}
+
+.row h2, .row h4 {
+  font-weight: 200;
+}
