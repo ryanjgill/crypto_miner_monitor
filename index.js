@@ -6,6 +6,7 @@ const ip = require('ip')
 const ADDRESS = ip.address()
 const PORT = 9090
 const CONFIG = require('./config')
+const resetTimers = []
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -23,6 +24,12 @@ let io = require('socket.io')(httpServer)
 let net = require('net')
 let five = require('johnny-five')
 let firmata = require('firmata')
+
+// stubb out temp and relay variables
+var CASE_TEMP
+  , GPU_TEMP
+  , GPU_TEMP_2
+  , PSU_RELAY
 
 // set options to match Firmata config for wifi
 // using MKR1000 with WiFi101
@@ -57,31 +64,31 @@ net.connect(options, function() {
       led.blink(2000)
 
       // setup temperature sensor LM35
-      let caseTemp = new five.Thermometer({
+      CASE_TEMP = new five.Thermometer({
         controller: 'LM35',
         pin: 'A1',
         freq: 250
       })
 
       // setup temperature sensor LM35
-      let gpuTemp = new five.Thermometer({
+      GPU_TEMP = new five.Thermometer({
         controller: 'LM35',
         pin: 'A2',
         freq: 250
       })
 
       // setup temperature sensor LM35
-      let gpuTemp2 = new five.Thermometer({
+      GPU_TEMP_2 = new five.Thermometer({
         controller: 'LM35',
         pin: 'A3',
         freq: 250
       })
 
       // power supply relay
-      let psuRelay = new five.Relay(5);
+      PSU_RELAY = new five.Relay(5);
       
       this.repl.inject({
-        psuRelay: psuRelay
+        psuRelay: PSU_RELAY
       });
 
       io.on('connection', function (socket) {
@@ -98,7 +105,7 @@ net.connect(options, function() {
 
       // emit chart data on each interval
       setInterval(function () {
-        emitChartData(io, caseTemp, gpuTemp, gpuTemp2, psuRelay)
+        emitChartData(io, CASE_TEMP, GPU_TEMP, GPU_TEMP_2, PSU_RELAY)
       }, 1000)
 
     })
@@ -118,16 +125,18 @@ function emitUsersCount(io) {
 }
 
 // emit chart data to all sockets
-function emitChartData(io, caseTemp, gpuTemp, gpuTemp2, psuRelay) {
+function emitChartData(io, CASE_TEMP, GPU_TEMP, GPU_TEMP_2, PSU_RELAY) {
   console.log('---------')
-  console.log(getTemp(caseTemp))
-  console.log(getTemp(gpuTemp))
-  console.log(getTemp(gpuTemp2))
-  console.log(psuRelay.value)
+  console.log(getTemp(CASE_TEMP))
+  console.log(getTemp(GPU_TEMP))
+  console.log(getTemp(GPU_TEMP_2))
+  console.log(PSU_RELAY.value)
+
+  
 
   io.sockets.emit('chart:data', {
     date: new Date().getTime(),
-    value: [getTemp(caseTemp), getTemp(gpuTemp), getTemp(gpuTemp2)]
+    value: [getTemp(CASE_TEMP), getTemp(GPU_TEMP), getTemp(GPU_TEMP_2)]
   })
 }
 
@@ -145,6 +154,13 @@ function pulseLed(led, duration, cb) {
   }, duration)
 }
 
+// clear reset timers
+function clearResetTimers() {
+  if (resetTimers && resetTimers.length) {
+    resetTimers.forEach(timerID => clearTimeout(timerID))
+  }
+}
+
 
 // Routes
 app.get('/', (req, res, next) => res.render('index'))
@@ -154,7 +170,7 @@ app.get('/temperature/case', (req, res, next) => {
 
   let result = {
     name: 'Case',
-    temperature: Math.round(Math.random() * 100)
+    temperature: getTemp(CASE_TEMP)
   }
 
   res.json(result)
@@ -165,17 +181,20 @@ app.get('/temperature/gpus', (req, res, next) => {
 
   let results = [{
     name: 'GPU 1',
-    temperature: Math.round(Math.random() * 100)
+    temperature: getTemp(GPU_TEMP)
   }, {
     name: 'GPU 2',
-    temperature: Math.round(Math.random() * 100)
+    temperature: getTemp(GPU_TEMP_2)
   }]
 
   res.json(results)
 })
 
 app.post('/reset', (req, res, next) => {
-  console.log(req.body);
+  PSU_RELAY.close()
+  clearResetTimers()
+  let timerID = setTimeout(() => PSU_RELAY.open(), 2000)
+  resetTimers.push(timerID)
   res.sendStatus(200)
 })
 
