@@ -21,6 +21,7 @@ app.get('/temperature/case', (req, res, next) => {
   console.log('User requested temp for case.');
 
   let result = {
+    name: 'Case',
     temperature: Math.round(Math.random() * 100)
   }
 
@@ -30,11 +31,15 @@ app.get('/temperature/case', (req, res, next) => {
 app.get('/temperature/gpus', (req, res, next) => {
   console.log('User requested temp for GPUs.')
 
-  let result = {
+  let results = [{
+    name: 'GPU 1',
     temperature: Math.round(Math.random() * 100)
-  }
+  }, {
+    name: 'GPU 2',
+    temperature: Math.round(Math.random() * 100)
+  }]
 
-  res.json(result)
+  res.json(results)
 })
 
 app.post('/reset', (req, res, next) => {
