@@ -91,9 +91,9 @@ net.connect(options, function() { //'connect' listener
       })
 
       // emit chart data on each interval
-      // setInterval(function () {
-      //   emitChartData(io, tempSensor, lightSensor, moistureSensor)
-      // }, 1000)
+      setInterval(function () {
+        emitChartData(io, tempSensor, lightSensor, moistureSensor)
+      }, 1000)
 
     })
   })
@@ -113,6 +113,10 @@ function emitUsersCount(io) {
 
 // emit chart data to all sockets
 function emitChartData(io, tempSensor, lightSensor, moistureSensor) {
+  console.log(tempSensor.value)
+  console.log(lightSensor.value)
+  console.log(moistureSensor.value)
+  
   io.sockets.emit('chart:data', {
     date: new Date().getTime(),
     value: [getTemp(tempSensor), getLight(lightSensor), getMoisture(moistureSensor)]
