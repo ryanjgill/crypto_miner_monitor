@@ -79,6 +79,10 @@ net.connect(options, function() {
 
       // power supply relay
       let psuRelay = new five.Relay(5);
+      
+      this.repl.inject({
+        psuRelay: psuRelay
+      });
 
       io.on('connection', function (socket) {
         console.log(socket.id)
