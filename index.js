@@ -31,8 +31,6 @@ const options = {
   port: CONFIG.MKR1000_PORT
 }
 
-console.log(options)
-
 // connection starts here
 net.connect(options, function() { //'connect' listener
   console.log('connected to server!')
@@ -134,6 +132,15 @@ function getLight(lightSensor) {
 // get moisture measurement
 function getMoisture(moisture) {
   return Math.round(moisture.value/1023*100)
+}
+
+// pulse led
+function pulseLed(led, duration, cb) {
+  led.blink()
+  setTimeout(function () {
+    led.stop().off()
+    cb()
+  }, duration)
 }
 
 
