@@ -54,13 +54,7 @@ net.connect(options, function() { //'connect' listener
       // setup led on pin 6 --> led pin for MKR1000
       led = new five.Led(6)
 
-      led.pulse({
-        easing: "linear",
-        duration: 3000,
-        cuePoints: [0, 0.2, 0.4, 0.6, 0.8, 1],
-        keyFrames: [0, 10, 0, 50, 0, 255],
-        loop: true
-      })
+      led.pulse(2000)
 
       // setup temperature sensor LM35
       tempSensor = new five.Thermometer({
