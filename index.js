@@ -172,5 +172,4 @@ app.use((req, res, next) => {
   res.sendStatus(404)
 })
 
-//httpServer.listen(PORT)
-app.listen(PORT, () => console.log(`Up and running at ${ADDRESS}:${PORT}`))
+httpServer.listen(PORT, () => console.log(`Up and running at ${ADDRESS}:${PORT}`))
