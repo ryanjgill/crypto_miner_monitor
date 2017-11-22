@@ -17,9 +17,7 @@ app.set('view engine', 'pug');
 
 app.get('/', (req, res, next) => res.render('index'))
 
-let tempRouter = app.router()
-
-tempRouter.get('/case', (req, res, next) => {
+app.get('/temperature/case', (req, res, next) => {
   console.log('User requested temp for case.');
 
   let result = {
@@ -29,7 +27,7 @@ tempRouter.get('/case', (req, res, next) => {
   res.json(result)
 })
 
-tempRouter.get('/gpus', (req, res, next) => {
+app.get('/temperature/gpus', (req, res, next) => {
   console.log('User requested temp for GPUs.')
 
   let result = {
@@ -38,8 +36,6 @@ tempRouter.get('/gpus', (req, res, next) => {
 
   res.json(result)
 })
-
-app.use('/temperature', tempRouter)
 
 app.post('/reset', (req, res, next) => {
   console.log(req.body);
