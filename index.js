@@ -4,7 +4,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const ip = require('ip')
 const ADDRESS = ip.address()
-const PORT = 3000
+const PORT = 9090
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
