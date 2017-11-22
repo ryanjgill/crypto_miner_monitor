@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const ip = require('ip')
 const ADDRESS = ip.address()
 const PORT = 9090
+const CONFIG = require('./config')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
