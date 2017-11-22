@@ -54,9 +54,12 @@ net.connect(options, function() { //'connect' listener
       // setup led on pin 6 --> led pin for MKR1000
       led = new five.Led(6)
 
-      // pulse led to indicate the board is communicating
-      pulseLed(led, 2000, function () {
-        console.log('LED √')
+      led.pulse({
+        easing: "linear",
+        duration: 3000,
+        cuePoints: [0, 0.2, 0.4, 0.6, 0.8, 1],
+        keyFrames: [0, 10, 0, 50, 0, 255],
+        loop: true
       })
 
       // setup temperature sensor LM35
