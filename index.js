@@ -31,9 +31,9 @@ const options = {
   port: CONFIG.MKR1000_PORT
 }
 
-// connection starts here
-net.connect(options, function() { //'connect' listener
-  console.log('connected to server!')
+// connection to MKR1000 starts here
+net.connect(options, function() {
+  console.log('Socket to MKR1000 opened')
 
   let socketClient = this
 
@@ -49,31 +49,36 @@ net.connect(options, function() { //'connect' listener
 
     board.on('ready', function() {
       // full Johnny-Five support here
-      console.log('five ready')
+      console.log('Johnny-five ready to rock')
 
       // setup led on pin 6 --> led pin for MKR1000
       led = new five.Led(6)
 
-      led.pulse(2000)
+      led.blink(2000)
 
       // setup temperature sensor LM35
-      tempSensor = new five.Thermometer({
+      let caseTemp = new five.Thermometer({
         controller: 'LM35',
         pin: 'A1',
         freq: 250
       })
 
-      // setup moisture sensor to correct pin
-      moistureSensor = new five.Sensor({
+      // setup temperature sensor LM35
+      let gpuTemp = new five.Thermometer({
+        controller: 'LM35',
         pin: 'A2',
         freq: 250
       })
 
-      // setup light sensor to correct pin
-      lightSensor = new five.Sensor({
+      // setup temperature sensor LM35
+      let gpuTemp2 = new five.Thermometer({
+        controller: 'LM35',
         pin: 'A3',
         freq: 250
       })
+
+      // power supply relay
+      let psuRelay = new five.Relay(5);
 
       io.on('connection', function (socket) {
         console.log(socket.id)
@@ -89,7 +94,7 @@ net.connect(options, function() { //'connect' listener
 
       // emit chart data on each interval
       setInterval(function () {
-        emitChartData(io, tempSensor, lightSensor, moistureSensor)
+        emitChartData(io, caseTemp, gpuTemp, gpuTemp2, psuRelay)
       }, 1000)
 
     })
@@ -109,30 +114,22 @@ function emitUsersCount(io) {
 }
 
 // emit chart data to all sockets
-function emitChartData(io, tempSensor, lightSensor, moistureSensor) {
-  console.log(getTemp(tempSensor))
-  console.log(getLight(lightSensor))
-  console.log(getMoisture(moistureSensor))
+function emitChartData(io, caseTemp, gpuTemp, gpuTemp2, psuRelay) {
+  console.log('---------')
+  console.log(getTemp(caseTemp))
+  console.log(getTemp(gpuTemp))
+  console.log(getTemp(gpuTemp2))
+  console.log(psuRelay.value)
 
   io.sockets.emit('chart:data', {
     date: new Date().getTime(),
-    value: [getTemp(tempSensor), getLight(lightSensor), getMoisture(moistureSensor)]
+    value: [getTemp(caseTemp), getTemp(gpuTemp), getTemp(gpuTemp2)]
   })
 }
 
 // get temperature measurement
 function getTemp(tempSensor) {
   return Math.round(tempSensor.fahrenheit - 25)
-}
-
-// get light measurement
-function getLight(lightSensor) {
-  return Math.round(lightSensor.value/1023*100)
-}
-
-// get moisture measurement
-function getMoisture(moisture) {
-  return Math.round(moisture.value/1023*100)
 }
 
 // pulse led
