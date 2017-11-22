@@ -31,6 +31,8 @@ const options = {
   port: CONFIG.MKR1000_PORT
 }
 
+console.log(options)
+
 // connection starts here
 net.connect(options, function() { //'connect' listener
   console.log('connected to server!')
@@ -99,6 +101,7 @@ net.connect(options, function() { //'connect' listener
   })
 
 }).on('error', function (err) {
+  console.log(err)
   console.log('Unable to connect!')
   console.log('Please make sure you have the latest StandardFirmataWifi sketch loaded on the MKR1000')
 })
