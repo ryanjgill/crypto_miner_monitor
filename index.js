@@ -113,10 +113,10 @@ function emitUsersCount(io) {
 
 // emit chart data to all sockets
 function emitChartData(io, tempSensor, lightSensor, moistureSensor) {
-  console.log(tempSensor.value)
-  console.log(lightSensor.value)
-  console.log(moistureSensor.value)
-  
+  console.log(getTemp(tempSensor))
+  console.log(getLight(lightSensor))
+  console.log(getMoisture(moistureSensor))
+
   io.sockets.emit('chart:data', {
     date: new Date().getTime(),
     value: [getTemp(tempSensor), getLight(lightSensor), getMoisture(moistureSensor)]
