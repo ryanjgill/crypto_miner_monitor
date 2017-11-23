@@ -58,7 +58,7 @@ net.connect(options, function() {
 
     boardIo.isReady = true
 
-    let board = new five.Board({io: boardIo, repl: true})
+    let board = new five.Board({io: boardIo})
 
     board.on('ready', function() {
       // full Johnny-Five support here
