@@ -26,14 +26,14 @@ html
           .mdl-layout-spacer
           // Navigation. We hide it in small screens.
           nav.mdl-navigation.mdl-layout--large-screen-only
-            a.mdl-navigation__link(href='#') Case
-            a.mdl-navigation__link(href='#') GPUs
+            a.mdl-navigation__link(href='/temperature/case') Case
+            a.mdl-navigation__link(href='/temperature/gpus') GPUs
             a.mdl-navigation__link(href='#') Reset PSU
       .mdl-layout__drawer
         span.mdl-layout-title CMM
         nav.mdl-navigation
-          a.mdl-navigation__link(href='#') Case
-          a.mdl-navigation__link(href='#') GPUs
+          a.mdl-navigation__link(href='/temperature/case') Case
+          a.mdl-navigation__link(href='/temperature/gpus') GPUs
           a.mdl-navigation__link(href='#') Reset PSU
       main.mdl-layout__content
         .page-content
@@ -43,8 +43,10 @@ html
             h4 Routes
             ul  
               
-              li GET '/temperature/case'
-              li GET '/temperature/gpus'
+              li GET
+                a(href='/temperature/case') /temperature/case
+              li GET 
+                a(href='/temperature/gpus') /temperature/gpus
               li POST '/reset'
 
           
