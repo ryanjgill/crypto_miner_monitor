@@ -108,6 +108,8 @@ net.connect(options, function() {
         emitChartData(io, CASE_TEMP, GPU_TEMP, GPU_TEMP_2, PSU_RELAY)
       }, 1000)
 
+      console.log('Done setting up MKR1000 sensors.')
+
     })
   })
 
