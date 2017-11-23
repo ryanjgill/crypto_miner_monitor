@@ -43,6 +43,12 @@ net.connect(options, function() {
   console.log('Socket to MKR1000 opened')
 
   let socketClient = this
+  
+  socketClient.on("error", (err) => {
+    console.log("MRK1000 connection failed!")
+    console.log(err.stack)
+  })
+
 
   // use the socketClient instead of a serial port for transport
   let boardIo = new firmata.Board(socketClient)
@@ -107,9 +113,6 @@ net.connect(options, function() {
       setInterval(function () {
         emitChartData(io, CASE_TEMP, GPU_TEMP, GPU_TEMP_2, PSU_RELAY)
       }, 1000)
-
-      console.log('Done setting up MKR1000 sensors.')
-
     })
   })
 
