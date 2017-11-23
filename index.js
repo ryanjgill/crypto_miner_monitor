@@ -93,9 +93,9 @@ net.connect(options, function() {
       // power supply relay
       PSU_RELAY = new five.Relay(5);
       
-      this.repl.inject({
-        psuRelay: PSU_RELAY
-      });
+      // this.repl.inject({
+      //   psuRelay: PSU_RELAY
+      // });
 
       io.on('connection', function (socket) {
         console.log(socket.id)
