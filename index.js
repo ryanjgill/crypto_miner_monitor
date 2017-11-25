@@ -132,13 +132,11 @@ function emitUsersCount(io) {
 // emit chart data to all sockets
 function emitChartData(io, CASE_TEMP, GPU_TEMP, GPU_TEMP_2, PSU_RELAY) {
   console.log('---------')
-  console.log(getTemp(CASE_TEMP))
-  console.log(getTemp(GPU_TEMP))
-  console.log(getTemp(GPU_TEMP_2))
-  console.log(PSU_RELAY.value)
-
+  console.log(`Case Temp: ${getTemp(CASE_TEMP)} °F`)
+  console.log(`GPU Temp: ${getTemp(GPU_TEMP)} °F`)
+  console.log(`GPU 2 Temp: ${getTemp(GPU_TEMP_2)} °F`)
+  console.log(PSU_RELAY.value === 0 ? 'Miner Status: ON' : 'Miner Status: Resetting PSU ...')
   
-
   io.sockets.emit('chart:data', {
     date: new Date().getTime(),
     value: [getTemp(CASE_TEMP), getTemp(GPU_TEMP), getTemp(GPU_TEMP_2)]
